@@ -213,11 +213,52 @@ int main(int argc, char* argv[]) {
 
             if (reply1 && reply2 && warnings) {
 
-                // Parse and display values
-                sscanf(reply1->c_str(), "%f %f %f %f %d %d %d %d %f %d %d %d %f %f %f %d %s", &voltage_grid, &freq_grid, &voltage_out, &freq_out, &load_va, &load_watt, &load_percent, &voltage_bus, &voltage_batt, &batt_charge_current, &batt_capacity, &temp_heatsink, &pv_input_current, &pv_input_voltage, &scc_voltage, &batt_discharge_current, &device_status);
-                char parallel_max_num;
+                // Parse and display values, QPIGS, * means contained in output, ^ is not included in output
+                sscanf(reply1->c_str(), "%f %f %f %f %d %d %d %d %f %d %d %d %f %f %f %d %s",
+                       &voltage_grid,          // * Grid voltage
+                       &freq_grid,             // * Grid frequency
+                       &voltage_out,           // * AC output voltage
+                       &freq_out,              // * AC output frequency
+                       &load_va,               // * AC output apparent power (VA)
+                       &load_watt,             // * AC output active power (Watt)
+                       &load_percent,          // * Output load percent - Maximum of W% or VA%., VA% is a percent of apparent power., W% is a percent of active power.
+                       &voltage_bus,           // * BUS voltage
+                       &voltage_batt,          // * Battery voltage
+                       &batt_charge_current,   // * Battery charging current
+                       &batt_capacity,         // * Battery capacity
+                       &temp_heatsink,         // * Inverter heat sink temperature
+                       &pv_input_current,      // * PV Input current for battery.
+                       &pv_input_voltage,      // * PV Input voltage 1
+                       &scc_voltage,           // * Battery voltage from SCC (V)
+                       &batt_discharge_current,// * Battery discharge current
+                       &device_status);        //
+                char parallel_max_num; //QPIRI
                 sscanf(reply2->c_str(), "%f %f %f %f %f %d %d %f %f %f %f %f %d %d %d %d %d %d %c %d %d %d %f",
-                       &grid_voltage_rating, &grid_current_rating, &out_voltage_rating, &out_freq_rating, &out_current_rating, &out_va_rating, &out_watt_rating, &batt_rating, &batt_recharge_voltage, &batt_under_voltage, &batt_bulk_voltage, &batt_float_voltage, &batt_type, &max_grid_charge_current, &max_charge_current, &in_voltage_range, &out_source_priority, &charger_source_priority, &parallel_max_num, &machine_type, &topology, &out_mode, &batt_redischarge_voltage);
+                       &grid_voltage_rating,      // ^ Grid rating voltage
+                       &grid_current_rating,      // ^ Grid rating current per protocol, frequency in practice
+                       &out_voltage_rating,       // ^ AC output rating voltage
+                       &out_freq_rating,          // ^ AC output rating frequency
+                       &out_current_rating,       // ^ AC output rating current
+                       &out_va_rating,            // ^ AC output rating apparent power
+                       &out_watt_rating,          // ^ AC output rating active power
+                       &batt_rating,              // ^ Battery rating voltage
+                       &batt_recharge_voltage,    // * Battery re-charge voltage
+                       &batt_under_voltage,       // * Battery under voltage
+                       &batt_bulk_voltage,        // * Battery bulk voltage
+                       &batt_float_voltage,       // * Battery float voltage
+                       &batt_type,                // ^ Battery type - 0 AGM, 1 Flooded, 2 User
+                       &max_grid_charge_current,  // * Current max AC charging current
+                       &max_charge_current,       // * Current max charging current
+                       &in_voltage_range,         // ^ Input voltage range, 0 Appliance 1 UPS
+                       &out_source_priority,      // * Output source priority, 0 Utility first, 1 solar first, 2 SUB first
+                       &charger_source_priority,  // * Charger source priority 0 Utility first, 1 solar first, 2 Solar + utility, 3 only solar charging permitted
+                       &parallel_max_num,         // ^ Parallel max number 0-9
+                       &machine_type,             // ^ Machine type 00 Grid tie, 01 Off grid, 10 hybrid
+                       &topology,                 // ^ Topology  0 transformerless 1 transformer
+                       &out_mode,                 // ^ Output mode 00: single machine output, 01: parallel output, 02: Phase 1 of 3 Phase output, 03: Phase 2 of 3 Phase output, 04: Phase 3 of 3 Phase output
+                       &batt_redischarge_voltage);// * Battery re-discharge voltage
+                                                  // ^ PV OK condition for parallel
+                                                  // ^ PV power balance
 
                 // There appears to be a discrepancy in actual DMM measured current vs what the meter is
                 // telling me it's getting, so lets add a variable we can multiply/divide by to adjust if
