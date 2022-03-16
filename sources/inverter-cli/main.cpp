@@ -284,38 +284,38 @@ int main(int argc, char* argv[]) {
                 printf("{\n");
 
                 printf("  \"Inverter_mode\":%d,\n", mode);
-                printf("  \"AC_grid_voltage\":%.1f,\n", voltage_grid);
-                printf("  \"AC_grid_frequency\":%.1f,\n", freq_grid);
-                printf("  \"AC_out_voltage\":%.1f,\n", voltage_out);
-                printf("  \"AC_out_frequency\":%.1f,\n", freq_out);
-                printf("  \"PV_in_voltage\":%.1f,\n", pv_input_voltage);
-                printf("  \"PV_in_current\":%.1f,\n", pv_input_current);
-                printf("  \"PV_in_watts\":%.1f,\n", pv_input_watts);
-                printf("  \"PV_in_watthour\":%.4f,\n", pv_input_watthour);
-                printf("  \"SCC_voltage\":%.4f,\n", scc_voltage);
-                printf("  \"Load_pct\":%d,\n", load_percent);
-                printf("  \"Load_watt\":%d,\n", load_watt);
-                printf("  \"Load_watthour\":%.4f,\n", load_watthour);
-                printf("  \"Load_va\":%d,\n", load_va);
-                printf("  \"Bus_voltage\":%d,\n", voltage_bus);
-                printf("  \"Heatsink_temperature\":%d,\n", temp_heatsink);
-                printf("  \"Battery_capacity\":%d,\n", batt_capacity);
-                printf("  \"Battery_voltage\":%.2f,\n", voltage_batt);
-                printf("  \"Battery_charge_current\":%d,\n", batt_charge_current);
-                printf("  \"Battery_discharge_current\":%d,\n", batt_discharge_current);
-                printf("  \"Load_status_on\":%c,\n", device_status[3]);
-                printf("  \"SCC_charge_on\":%c,\n", device_status[6]);
-                printf("  \"AC_charge_on\":%c,\n", device_status[7]);
-                printf("  \"Battery_recharge_voltage\":%.1f,\n", batt_recharge_voltage);
-                printf("  \"Battery_under_voltage\":%.1f,\n", batt_under_voltage);
-                printf("  \"Battery_bulk_voltage\":%.1f,\n", batt_bulk_voltage);
-                printf("  \"Battery_float_voltage\":%.1f,\n", batt_float_voltage);
-                printf("  \"Max_grid_charge_current\":%d,\n", max_grid_charge_current);
-                printf("  \"Max_charge_current\":%d,\n", max_charge_current);
-                printf("  \"Out_source_priority\":%d,\n", out_source_priority);
-                printf("  \"Charger_source_priority\":%d,\n", charger_source_priority);
-                printf("  \"Battery_redischarge_voltage\":%.1f,\n", batt_redischarge_voltage);
-                printf("  \"Warnings\":\"%s\"\n", warnings->c_str());
+                printf("  \"AC_grid_voltage\":%.1f,\n", voltage_grid);    // QPIGS
+                printf("  \"AC_grid_frequency\":%.1f,\n", freq_grid);     // QPIGS
+                printf("  \"AC_out_voltage\":%.1f,\n", voltage_out);      // QPIGS
+                printf("  \"AC_out_frequency\":%.1f,\n", freq_out);       // QPIGS
+                printf("  \"PV_in_voltage\":%.1f,\n", pv_input_voltage);  // QPIGS
+                printf("  \"PV_in_current\":%.1f,\n", pv_input_current);  // QPIGS
+                printf("  \"PV_in_watts\":%.1f,\n", pv_input_watts);      // = (scc_voltage * pv_input_current) * wattfactor;
+                printf("  \"PV_in_watthour\":%.4f,\n", pv_input_watthour);// = pv_input_watts / (3600 / runinterval);
+                printf("  \"SCC_voltage\":%.4f,\n", scc_voltage);         // QPIGS
+                printf("  \"Load_pct\":%d,\n", load_percent);             // QPIGS
+                printf("  \"Load_watt\":%d,\n", load_watt);               // QPIGS
+                printf("  \"Load_watthour\":%.4f,\n", load_watthour);     //load_watthour = (float)load_watt / (3600 / runinterval);
+                printf("  \"Load_va\":%d,\n", load_va);                   // QPIGS
+                printf("  \"Bus_voltage\":%d,\n", voltage_bus);           // QPIGS
+                printf("  \"Heatsink_temperature\":%d,\n", temp_heatsink);// QPIGS
+                printf("  \"Battery_capacity\":%d,\n", batt_capacity);    // QPIGS
+                printf("  \"Battery_voltage\":%.2f,\n", voltage_batt);    // QPIGS
+                printf("  \"Battery_charge_current\":%d,\n", batt_charge_current); // QPIGS 
+                printf("  \"Battery_discharge_current\":%d,\n", batt_discharge_current); // QPIGS
+                printf("  \"Load_status_on\":%c,\n", device_status[3]);   //
+                printf("  \"SCC_charge_on\":%c,\n", device_status[6]);    //
+                printf("  \"AC_charge_on\":%c,\n", device_status[7]);     //
+                printf("  \"Battery_recharge_voltage\":%.1f,\n", batt_recharge_voltage); // QPIRI
+                printf("  \"Battery_under_voltage\":%.1f,\n", batt_under_voltage); // QPIRI
+                printf("  \"Battery_bulk_voltage\":%.1f,\n", batt_bulk_voltage);  // QPIRI
+                printf("  \"Battery_float_voltage\":%.1f,\n", batt_float_voltage); // QPIRI 
+                printf("  \"Max_grid_charge_current\":%d,\n", max_grid_charge_current); // QPIRI
+                printf("  \"Max_charge_current\":%d,\n", max_charge_current);  // QPIRI
+                printf("  \"Out_source_priority\":%d,\n", out_source_priority); // QPIRI
+                printf("  \"Charger_source_priority\":%d,\n", charger_source_priority); // QPIRI
+                printf("  \"Battery_redischarge_voltage\":%.1f,\n", batt_redischarge_voltage);  // QPIRI
+                printf("  \"Warnings\":\"%s\"\n", warnings->c_str());     //
                 printf("}\n");
 
                 // Delete reply string so we can update with new data when polled again...
