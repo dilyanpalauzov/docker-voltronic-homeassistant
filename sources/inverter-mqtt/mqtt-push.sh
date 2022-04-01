@@ -48,6 +48,6 @@ INVERTER_DATA=`timeout 10 /opt/inverter-cli/bin/inverter_poller -1`
 #####################################################################################
 # Inverter_Mode: 1 = Power_On, 2 = Standby, 3 = Line, 4 = Battery, 5 = Fault, 6 = Power_Saving, 7 = Unknown
 
-for w in Inverter_mode AC_grid_voltage AC_grid_frequency AC_out_voltage AC_out_frequency PV_in_voltage PV_in_current PV_in_watts PV_in_watthour SCC_voltage Load_pct Load_watt Load_watthour Load_va Bus_voltage Heatsink_temperature Battery_capacity Battery_voltage Battery_charge_current Battery_discharge_current Load_status_on SCC_charge_on AC_charge_on Battery_recharge_voltage Battery_under_voltage Battery_bulk_voltage Battery_float_voltage Max_grid_charge_current Max_charge_current Out_source_priority Charger_source_priority Battery_redischarge_voltage Warnings; do
+for w in Inverter_mode AC_grid_voltage AC_grid_frequency AC_out_voltage AC_out_frequency PV_in_voltage PV_in_current PV_in_watts SCC_voltage Load_pct Load_watt Load_va Bus_voltage Heatsink_temperature Battery_capacity Battery_voltage Battery_charge_current Battery_discharge_current Load_status_on SCC_charge_on AC_charge_on Battery_recharge_voltage Battery_under_voltage Battery_bulk_voltage Battery_float_voltage Max_grid_charge_current Max_charge_current Out_source_priority Charger_source_priority Battery_redischarge_voltage Warnings; do
     pushMQTTData $w
 done
