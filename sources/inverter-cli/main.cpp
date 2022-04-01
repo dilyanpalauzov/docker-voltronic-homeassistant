@@ -125,8 +125,6 @@ int main(int argc, char* argv[]) {
     float pv_input_current;
     float pv_input_voltage;
     float pv_input_watts;
-    float pv_input_watthour;
-    float load_watthour = 0;
     float scc_voltage;
     int batt_discharge_current;
     char device_status[9];
@@ -277,8 +275,8 @@ int main(int argc, char* argv[]) {
                 pv_input_watts = (scc_voltage * pv_input_current) * wattfactor;
 
                 // Calculate watt-hours generated per run interval period (given as program argument)
-                pv_input_watthour = pv_input_watts / (3600 / runinterval);
-                load_watthour = (float)load_watt / (3600 / runinterval);
+                //pv_input_watthour = pv_input_watts / (3600 / runinterval);
+                //load_watthour = (float)load_watt / (3600 / runinterval);
 
                 // Print as JSON (output is expected to be parsed by another tool...)
                 printf("{\n");
@@ -291,11 +289,11 @@ int main(int argc, char* argv[]) {
                 printf("  \"PV_in_voltage\":%.1f,\n", pv_input_voltage);  // QPIGS
                 printf("  \"PV_in_current\":%.1f,\n", pv_input_current);  // QPIGS
                 printf("  \"PV_in_watts\":%.1f,\n", pv_input_watts);      // = (scc_voltage * pv_input_current) * wattfactor;
-                printf("  \"PV_in_watthour\":%.4f,\n", pv_input_watthour);// = pv_input_watts / (3600 / runinterval);
+                //printf("  \"PV_in_watthour\":%.4f,\n", pv_input_watthour);// = pv_input_watts / (3600 / runinterval);
                 printf("  \"SCC_voltage\":%.4f,\n", scc_voltage);         // QPIGS
                 printf("  \"Load_pct\":%d,\n", load_percent);             // QPIGS
                 printf("  \"Load_watt\":%d,\n", load_watt);               // QPIGS
-                printf("  \"Load_watthour\":%.4f,\n", load_watthour);     //load_watthour = (float)load_watt / (3600 / runinterval);
+                //printf("  \"Load_watthour\":%.4f,\n", load_watthour);     //load_watthour = (float)load_watt / (3600 / runinterval);
                 printf("  \"Load_va\":%d,\n", load_va);                   // QPIGS
                 printf("  \"Bus_voltage\":%d,\n", voltage_bus);           // QPIGS
                 printf("  \"Heatsink_temperature\":%d,\n", temp_heatsink);// QPIGS
