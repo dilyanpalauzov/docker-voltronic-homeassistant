@@ -1,6 +1,8 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include <string.h>
+#include <sys/file.h>
+#include <syslog.h>
 #include <unistd.h>
 #include "inverter.h"
 #include "tools.h"
@@ -117,8 +119,9 @@ bool cInverter::query(const char *cmd, int replysize) {
     do {
         n = read(fd, (void*)buf+i, replysize-i);
         if (n < 0) {
-            if (time(NULL) - started > 2) {
+            if (time(NULL) - started > 15) {
                 lprintf("INVERTER: %s read timeout", cmd);
+                syslog(LOG_CRIT, "INVERTER: %s read timeout", cmd);
                 break;
             } else {
                 usleep(10);
