@@ -181,9 +181,8 @@ int main(int argc, char* argv[]) {
         // We're piggybacking off the qpri status response...
         printf("Reply:  %s\n", ups->GetQpiriStatus()->c_str());
         exit(0);
-    } else {
-        ups->runMultiThread();
     }
+    ups->runMultiThread();
 
     while (true) {
         if (ups_status_changed) {
