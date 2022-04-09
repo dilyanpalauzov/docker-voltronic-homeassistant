@@ -43,7 +43,8 @@ pushInfluxData () {
     curl -i -XPOST "$INFLUX_HOST/write?db=$INFLUX_DATABASE&precision=s" -u "$INFLUX_USERNAME:$INFLUX_PASSWORD" --data-binary "$INFLUX_PREFIX,device=$INFLUX_DEVICE $INFLUX_MEASUREMENT_NAME=$2"
 }
 
-INVERTER_DATA=`timeout 10 /opt/inverter-cli/bin/inverter_poller -1`
+INVERTER_DATA=`timeout 10 /usr/local/bin/inverter_poller -1`
+
 
 #####################################################################################
 # Inverter_Mode: 1 = Power_On, 2 = Standby, 3 = Line, 4 = Battery, 5 = Fault, 6 = Power_Saving, 7 = Unknown
