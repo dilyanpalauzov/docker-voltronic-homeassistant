@@ -7,11 +7,12 @@ MQTT_DEVICENAME=`cat /etc/inverter/mqtt.json | jq '.devicename' -r`
 MQTT_USERNAME=`cat /etc/inverter/mqtt.json | jq '.username' -r`
 MQTT_PASSWORD=`cat /etc/inverter/mqtt.json | jq '.password' -r`
 MQTT_CLIENTID=`cat /etc/inverter/mqtt.json | jq '.clientid' -r`
+cd /etc/inv1
 
 while read rawcmd;
 do
 
-    echo "Incoming request send: [$rawcmd] to inverter."
-    /opt/inverter-cli/bin/inverter_poller -r $rawcmd;
+    #echo "Incoming request send: [$rawcmd] to inverter."
+    /usr/local/bin/inverter_poller -r $rawcmd &> /dev/null
 
 done < <(mosquitto_sub -h $MQTT_SERVER -p $MQTT_PORT -u "$MQTT_USERNAME" -P "$MQTT_PASSWORD" -i $MQTT_CLIENTID -t "$MQTT_TOPIC/sensor/$MQTT_DEVICENAME" -q 1)
