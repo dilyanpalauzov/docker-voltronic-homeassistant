@@ -157,7 +157,7 @@ bool cInverter::query(const char *cmd, int replysize) {
 }
 
 void cInverter::poll() {
-    extern const int qpiri, qpiws, qmod, qpigs;
+    extern const int qpiri, qpiws, qmod, qpigs, runOnce;
 
     while (true) {
 
@@ -198,7 +198,7 @@ void cInverter::poll() {
                 ups_qpiws_changed = true;
             }
         }
-        if (quit_thread) return;
+        if (quit_thread || runOnce) return;
         sleep(5);
     }
 }

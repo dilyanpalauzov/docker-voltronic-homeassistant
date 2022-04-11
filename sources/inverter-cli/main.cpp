@@ -212,7 +212,12 @@ int main(int argc, char* argv[]) {
         printf("Reply:  %s\n", ups->GetQpiriStatus()->c_str());
         exit(0);
     }
-    ups->runMultiThread();
+
+
+    if (runOnce)
+        ups->poll();
+    else
+        ups->runMultiThread();
 
     while (true) {
         if (ups_status_changed) {
@@ -341,7 +346,7 @@ int main(int argc, char* argv[]) {
                 delete reply2;
 
                 if(runOnce) {
-                    ups->terminateThread();
+                    // there is no thread -- ups->terminateThread();
                     // Do once and exit instead of loop endlessly
                     lprintf("INVERTER: All queries complete, exiting loop.");
                     exit(0);
