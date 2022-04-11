@@ -198,6 +198,14 @@ int main(int argc, char* argv[]) {
             replylen = 5;
         else if (!strcmp(rawcmd.c_str(), "QOPM"))
             replylen = 6;
+	else if (!strcmp(rawcmd.c_str(), "QMOD"))
+            replylen = qmod;
+	else if (!strcmp(rawcmd.c_str(), "QPIRI"))
+            replylen = qpiri;
+	else if (!strcmp(rawcmd.c_str(), "QPIGS"))
+            replylen = qpigs;
+	else if (!strcmp(rawcmd.c_str(), "QPIWS"))
+            replylen = qpiws;
         else replylen = 7;
         ups->ExecuteCmd(rawcmd, replylen);
         // We're piggybacking off the qpri status response...
