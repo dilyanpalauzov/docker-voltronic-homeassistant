@@ -9,10 +9,34 @@ MQTT_PASSWORD=`cat /etc/inverter/mqtt.json | jq '.password' -r`
 MQTT_CLIENTID=`cat /etc/inverter/mqtt.json | jq '.clientid' -r`
 cd /etc/inv1
 
+ret=1
+while [ $ret = 1 ];
+do
+      /usr/bin/sleep 1
+      /usr/bin/pgrep mosquitto > /dev/null
+      ret=$?
+done
+/usr/bin/sleep 4
+
+/usr/bin/mosquitto_pub --retain \
+    -h $MQTT_SERVER \
+    -u "$MQTT_USERNAME" \
+    -P "$MQTT_PASSWORD" \
+    -t "homeassistant/sensor/inv1/status" \
+    -m `(cd /etc/inv1 && inverter_poller -r QFLAG| sed "s/Reply:  //")`
+
 while read rawcmd;
 do
-
     #echo "Incoming request send: [$rawcmd] to inverter."
-    /usr/local/bin/inverter_poller -r $rawcmd &> /dev/null
+    (cd /etc/inv1 && /usr/local/bin/inverter_poller -r $rawcmd &)
+    (cd /etc/inv2 && /usr/local/bin/inverter_poller -r $rawcmd &)
+    if [ ${rawcmd:0:2} = 'PD' -o ${rawcmd:0:2} = 'PE' ]; then
+        /usr/bin/mosquitto_pub \
+          -h $MQTT_SERVER \
+          -u "$MQTT_USERNAME" \
+          -P "$MQTT_PASSWORD" \
+          -t "homeassistant/sensor/inv1/status" \
+          -m `(cd /etc/inv1 && inverter_poller -r QFLAG| sed "s/Reply:  //")`
+    fi
 
 done < <(mosquitto_sub -h $MQTT_SERVER -p $MQTT_PORT -u "$MQTT_USERNAME" -P "$MQTT_PASSWORD" -i $MQTT_CLIENTID -t "$MQTT_TOPIC/sensor/$MQTT_DEVICENAME" -q 1)
