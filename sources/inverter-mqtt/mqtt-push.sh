@@ -10,11 +10,27 @@ MQTT_PASSWORD=`cat /etc/inverter/mqtt.json | jq '.password' -r`
 MQTT_CLIENTID=`cat /etc/inverter/mqtt.json | jq '.clientid' -r`
 
 pushMQTTData () {
+    mosquitto_pub \
+        -h $MQTT_SERVER \
+        -p $MQTT_PORT \
+        -u "$MQTT_USERNAME" \
+        -P "$MQTT_PASSWORD" \
+        -i $MQTT_CLIENTID \
+        -t "$MQTT_TOPIC/sensor/"$MQTT_DEVICENAME"_$1" \
+        -m "$2"
+}
+
+
+#####################################################################################
+z () {
     param=$1
     value=`echo $INVERTER_DATA| sed --expression "sK.*\"$param\":\([^,}]*\).*K\1K"`
 
     if test -z $value; then
 	return
+    fi
+    if test ${value:0:1} = '"'; then
+	value=${value:1:-2}
     fi
 
     mosquitto_pub \
@@ -25,11 +41,16 @@ pushMQTTData () {
         -i $MQTT_CLIENTID \
         -t "$MQTT_TOPIC/sensor/"$MQTT_DEVICENAME"_$param" \
         -m "$value"
-    
-    if [[ $INFLUX_ENABLED == "true" ]] ; then
-        pushInfluxData $param $value
-    fi
 }
+while :
+do
+    INVERTER_DATA=`cd /etc/inv${ID} && timeout 10 /usr/local/bin/inverter_poller -1`
+    for w in Inverter_mode AC_grid_voltage AC_grid_frequency AC_out_voltage AC_out_frequency PV_in_voltage PV_in_current PV_in_watts SCC_voltage Load_pct Load_watt Load_va Bus_voltage Heatsink_temperature Battery_capacity Battery_voltage Battery_charge_current Battery_discharge_current Load_status_on SCC_charge_on AC_charge_on Battery_recharge_voltage Battery_under_voltage Battery_bulk_voltage Battery_float_voltage Max_grid_charge_current Max_charge_current Out_source_priority Charger_source_priority Battery_redischarge_voltage Warnings; do
+    z $w
+    done
+    sleep 3.5
+done
+exit
 
 pushInfluxData () {
     INFLUX_HOST=`cat /etc/inverter/mqtt.json | jq '.influx.host' -r`
