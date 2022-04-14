@@ -192,6 +192,10 @@ int main(int argc, char* argv[]) {
             replylen = 18;
         else if (!strcmp(rawcmd.c_str(), "QVFW2"))
             replylen = 19;
+        else if (!strcmp(rawcmd.c_str(), "QVFW3"))
+            replylen = 19;
+        else if (!strcmp(rawcmd.c_str(), "QVFW4"))
+            replylen = 19;
         else if (!strcmp(rawcmd.c_str(), "QFLAG"))
             replylen = 15;
         else if (!strcmp(rawcmd.c_str(), "QBOOT"))
@@ -204,6 +208,16 @@ int main(int argc, char* argv[]) {
             replylen = qpiri;
 	else if (!strcmp(rawcmd.c_str(), "QPIGS"))
             replylen = qpigs;
+	else if (!strcmp(rawcmd.c_str(), "QPIGS2"))
+            replylen = 71;
+	else if (!strcmp(rawcmd.c_str(), "QDI"))
+            replylen = 83;
+	else if (!strcmp(rawcmd.c_str(), "QCST"))
+            replylen = 6;
+	else if (!strcmp(rawcmd.c_str(), "QCVT"))
+            replylen = 7;
+	else if (!strcmp(rawcmd.c_str(), "QBEQI"))
+            replylen = 37;
 	else if (!strcmp(rawcmd.c_str(), "QPIWS"))
             replylen = qpiws;
         else replylen = 7;
