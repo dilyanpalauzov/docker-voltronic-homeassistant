@@ -1,0 +1,12 @@
+[Unit]
+Description=Send commands from MQTT/Openhab UIs to the inverters
+After=mosquitto.service
+Wants=mosquitto.service
+
+[Service]
+Type=simple
+StandardOutput=null
+ExecStart=/usr/local/bin/mqtt-subscriber.sh
+
+[Install]
+WantedBy=multi-user.target

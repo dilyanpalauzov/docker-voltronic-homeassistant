@@ -1,0 +1,9 @@
+[Unit]
+Description=Fetch Data from inverter
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/mqtt-push2.sh
+
+[Install]
+WantedBy=multi-user.target
