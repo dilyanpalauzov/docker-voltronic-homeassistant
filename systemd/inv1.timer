@@ -1,0 +1,8 @@
+[Unit]
+Description=Update Inverters every minute
+
+[Timer]
+OnCalendar=*:*:00/5
+
+[Install]
+WantedBy=timers.target
