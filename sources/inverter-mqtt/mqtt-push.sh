@@ -16,7 +16,7 @@ pushMQTTData () {
         -u "$MQTT_USERNAME" \
         -P "$MQTT_PASSWORD" \
         -i $MQTT_CLIENTID \
-        -t "$MQTT_TOPIC/sensor/"$MQTT_DEVICENAME"_$1" \
+        -t $MQTT_DEVICENAME"_$1" \
         -m "$2"
 }
 
@@ -39,7 +39,7 @@ z () {
         -u "$MQTT_USERNAME" \
         -P "$MQTT_PASSWORD" \
         -i $MQTT_CLIENTID \
-        -t "$MQTT_TOPIC/sensor/"$MQTT_DEVICENAME"_$param" \
+        -t $MQTT_DEVICENAME"_$param" \
         -m "$value"
 }
 while :
