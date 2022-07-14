@@ -252,7 +252,7 @@ int main(int argc, char* argv[]) {
             int mode = ups->GetMode();
             string *reply1   = ups->GetQpigsStatus();
             string *reply2   = ups->GetQpiriStatus();
-            string *warnings = ups->GetWarnings();
+            char *warnings = ups->GetWarnings();
 
             if (reply1 && reply2 && warnings) {
 
@@ -352,7 +352,7 @@ int main(int argc, char* argv[]) {
                 printf("  \"Out_source_priority\":%d,\n", out_source_priority); // QPIRI
                 printf("  \"Charger_source_priority\":%d,\n", charger_source_priority); // QPIRI
                 printf("  \"Battery_redischarge_voltage\":%.1f,\n", batt_redischarge_voltage);  // QPIRI
-                printf("  \"Warnings\":\"%s\"\n", warnings->c_str());     //
+                printf("  \"Warnings\":\"%s\"\n", warnings);     //
                 printf("}\n");
 
                 // Delete reply string so we can update with new data when polled again...
@@ -366,6 +366,7 @@ int main(int argc, char* argv[]) {
                     exit(0);
                 }
             }
+            free(warnings);
         }
 
         sleep(1);
