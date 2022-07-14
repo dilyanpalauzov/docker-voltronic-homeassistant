@@ -9,6 +9,59 @@
 
 #include <termios.h>
 
+static char* warn_to_text(const char *i) {
+  if (strcmp(i, "00000000000000000000000000000000") == 0) return strdup("Няма");
+  int len = 0;
+  const char* errors[33];
+  if (i[0] == '1') errors[len++] = "A0: резервирано";
+  if (i[2] == '1') errors[len++] = "Грешка: Bus over";
+  if (i[3] == '1') errors[len++] = "Грешка: Bus under";
+  if (i[4] == '1') errors[len++] = "Грешка: Bus soft fail";
+  if (i[5] == '1') errors[len++] = "Няма мрежа";
+  if (i[6] == '1') errors[len++] = "Предупреждение: OPVShort";
+  if (i[7] == '1') errors[len++] = "Грешка: Напрежението на инвертора е много ниско";
+  if (i[8] == '1') errors[len++] = "Грешка: Напрежението на инвертора е много високо";
+  if (i[9] == '1' || i[10] == '1' || i[11] == '1' || i[12] == '1') {
+    if (i[9] == '1') errors[len++] = i[1] == '1' ? "Грешка: Пренагряване": "Предупреждение: Пренагряване";
+    if (i[10] == '1') errors[len++] = i[1] == '1' ? "Грешка: Блокиран вентилатор" : "Предупреждение: Блокиран вентилатор";
+    if (i[11] == '1') errors[len++] = i[1] == '1' ? "Грешка: Високо напрежение на батериите": "Предупреждение: Високо напрежение на батериите";
+    if (i[16] == '1') errors[len++] = i[1] == '1' ? "Грешка: Пренатоварване": "Предупреждение: Пренатоварване";
+  } else if (i[1] == '1') errors[len++] = "Грешка с инвертора";
+  if (i[12] == '1') errors[len++] = "Предупреждение: Ниско напрежение на батериите";
+  if (i[13] == '1') errors[len++] = "A13: резервирано";
+  if (i[14] == '1') errors[len++] = "Предупреждение: Battery under shutdown";
+  if (i[15] == '1') errors[len++] = "A15: резервирано";
+  if (i[17] == '1') errors[len++] = "Предупреждение: EEPROM fault";
+  if (i[18] == '1') errors[len++] = "Грешка: Inverter Over Current";
+  if (i[19] == '1') errors[len++] = "Грешка: Inverter Soft Fail";
+  if (i[20] == '1') errors[len++] = "Грешка: Self Test Fail";
+  if (i[21] == '1') errors[len++] = "Грешка: OP DC Voltage Over";
+  if (i[22] == '1') errors[len++] = "Грешка: Bat Open";
+  if (i[23] == '1') errors[len++] = "Грешка: Current Sensor Fail";
+  if (i[24] == '1') errors[len++] = "Грешка: Battery Short";
+  if (i[25] == '1') errors[len++] = "Предупреждение: Power limit";
+  if (i[26] == '1') errors[len++] = "Предупреждение: PV voltage high";
+  if (i[27] == '1') errors[len++] = "Предупреждение: MPPT overload fault";
+  if (i[28] == '1') errors[len++] = "Предупреждение: MPPT overload warning";
+  if (i[29] == '1') errors[len++] = "Предупреждение: Battery too low to charge";
+  if (i[30] == '1') errors[len++] = "A30: резервирано";
+  if (i[31] == '1') errors[len++] = "A31: резервирано";
+
+  int t = 0;
+  for (int i = 0; i < len; ++i)
+    t += strlen(errors[i]) + 2;
+  char* res = (char*)malloc(t);
+  t = 0;
+  for (int i = 0; i < len; ++i) {
+    strcpy(res + t, errors[i]);
+    t += strlen(errors[i]) + 2;
+    res[t - 2] = ',';
+    res[t - 1] = ' ';
+  }
+  res[t-2] = '\0';
+  return res;
+}
+
 cInverter::cInverter(std::string devicename, int qpiri, int qpiws, int qmod, int qpigs) {
     device = devicename;
     status1[0] = 0;
@@ -35,9 +88,9 @@ string *cInverter::GetQpiriStatus() {
     return result;
 }
 
-string *cInverter::GetWarnings() {
+char *cInverter::GetWarnings() {
     m.lock();
-    string *result = new string(warnings);
+    char *result = warn_to_text(warnings);
     m.unlock();
     return result;
 }

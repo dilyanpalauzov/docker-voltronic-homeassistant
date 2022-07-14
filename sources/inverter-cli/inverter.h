@@ -38,7 +38,7 @@ class cInverter {
 
         string *GetQpiriStatus();
         string *GetQpigsStatus();
-        string *GetWarnings();
+        char *GetWarnings();
 
         int GetMode();
         void ExecuteCmd(const std::string cmd, int);
