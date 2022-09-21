@@ -186,6 +186,8 @@ int main(int argc, char* argv[]) {
         int replylen;
         if (!strcmp(rawcmd.c_str(), "QPI"))
             replylen = 8;
+        else if (!strncmp(rawcmd.c_str(), "QPGS", 4))
+            replylen = 133;
         else if (!strcmp(rawcmd.c_str(), "QID"))
             replylen = 18;
         else if (!strcmp(rawcmd.c_str(), "QVFW"))
